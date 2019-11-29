@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ConstruparkAppAlpha</string>
+    <string name="ui_main_rfid_uhf_reader">RFID UHF Reader</string>
+</resources>

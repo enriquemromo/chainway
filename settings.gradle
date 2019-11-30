@@ -1,2 +1,2 @@
-include ':app', ':uhfreader'
+include ':app', ':uhfreader', ':barcodereader', ':cw-deviceapi'
 rootProject.name='ConstruparkAppAlpha'

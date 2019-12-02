@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,30 +16,25 @@ import com.zebra.adc.decoder.Barcode2DWithSoft;
 import java.io.UnsupportedEncodingException;
 
 public class BarCodeActivity extends AppCompatActivity {
-
     private final static String TAG = BarCodeActivity.class.getName();
 
-    Barcode2DWithSoft barcode2DWithSoft=null;
+    private static final int TRIGGER_CODE = 280;
+    private static final int SCAN_BUTTON_CODE = 139;
+
+    private Barcode2DWithSoft barcode2DWithSoft=null;
     private TextView barCodeTextView;
-    private Button ReadBarCodeButton;
-    String seldata="ASCII";
-    String barCode="";
+    private String seldata="ASCII";
+    private String barCode="";
+    private boolean loopFlag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.barcode_activity_layout);
 
-        barcode2DWithSoft=Barcode2DWithSoft.getInstance();
+        barcode2DWithSoft = Barcode2DWithSoft.getInstance();
         barCodeTextView = findViewById(R.id.barCodetextView);
-        ReadBarCodeButton = findViewById(R.id.readBarCodeButton);
-        ReadBarCodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scanBarcode();
-            }
-        });
-
+        loopFlag = false;
         new InitTask().execute();
 
     }
@@ -81,6 +77,26 @@ public class BarCodeActivity extends AppCompatActivity {
         }
     };
 
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if(keyCode == TRIGGER_CODE){
+
+            scanBarcode();
+
+        }
+        if(keyCode == SCAN_BUTTON_CODE){
+
+
+
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
     @Override
     protected void onDestroy() {
         Log.i(TAG,"onDestroy");
@@ -92,40 +108,30 @@ public class BarCodeActivity extends AppCompatActivity {
         //android.os.Process.killProcess(Process.myPid());
     }
 
-    void zt() {
+    private void zt() {
 
         Vibrator vibrator = (Vibrator)this.getSystemService(this.VIBRATOR_SERVICE);
         vibrator.vibrate(100);
     }
 
 
-    public class InitTask extends AsyncTask<String, Integer, Boolean> {
+    private class InitTask extends AsyncTask<String, Integer, Boolean> {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            // TODO Auto-generated method stub
-
-
-            boolean reuslt=false;
-            if(barcode2DWithSoft!=null) {
-                reuslt=  barcode2DWithSoft.open(BarCodeActivity.this);
-                Log.i(TAG,"open="+reuslt);
+            boolean result=false;
+            if(barcode2DWithSoft != null) {
+                result=  barcode2DWithSoft.open(BarCodeActivity.this);
+                Log.i(TAG,"open="+result);
 
             }
-            return reuslt;
+            return result;
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            if(result){
-//                barcode2DWithSoft.setParameter(324, 1);
-//                barcode2DWithSoft.setParameter(300, 0); // Snapshot Aiming
-//                barcode2DWithSoft.setParameter(361, 0); // Image Capture Illumination
 
-                // interleaved 2 of 5
-
-            }
         }
 
         @Override

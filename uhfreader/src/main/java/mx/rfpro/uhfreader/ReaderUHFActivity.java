@@ -173,11 +173,11 @@ public class ReaderUHFActivity extends AppCompatActivity {
         }
     }
 
-    private class InitTask extends AsyncTask<Void, Void, Boolean> {
+    private class InitTask extends AsyncTask<Void, Void, Void> {
 
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Void doInBackground(Void... voids) {
             mReader.init();
 
             if (mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("UII"), 32, 16,
@@ -187,8 +187,7 @@ public class ReaderUHFActivity extends AppCompatActivity {
             } else {
                 Log.d("DEBUG---","fail");
             }
-
-            return true;
+            return null;
         }
     }
 

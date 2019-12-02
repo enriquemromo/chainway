@@ -72,8 +72,6 @@ public class ReaderUHFActivity extends AppCompatActivity {
     public void initUHF() {
         try {
             mReader = RFIDWithUHF.getInstance();
-           /* mContext.mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("UII"), 32, 32,
-                    "67808275", false);*/
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -180,13 +178,13 @@ public class ReaderUHFActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             mReader.init();
 
-            if (mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("UII"), 32, 16,
+            /*if (mReader.setFilter(RFIDWithUHF.BankEnum.valueOf("UII"), 32, 16,
                     "454C", false)) {
                 //Toast.makeText(mContext, "Success",Toast.LENGTH_LONG).show();
                 Log.d("DEBUG---","success");
             } else {
                 Log.d("DEBUG---","fail");
-            }
+            }*/
             return null;
         }
     }

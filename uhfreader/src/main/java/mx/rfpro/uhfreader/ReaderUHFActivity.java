@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +43,8 @@ public class ReaderUHFActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reader_uhf_main_layout);
         RecyclerView rv = findViewById(R.id.recyclerViewTag);
+        rv.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
         clearButton = findViewById(R.id.clearButton);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override

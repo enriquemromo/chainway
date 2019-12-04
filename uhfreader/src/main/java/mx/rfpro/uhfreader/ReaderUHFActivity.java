@@ -1,26 +1,27 @@
 package mx.rfpro.uhfreader;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+        import android.os.AsyncTask;
+        import android.os.Bundle;
+        import android.text.TextUtils;
+        import android.util.Log;
+        import android.view.KeyEvent;
+        import android.view.View;
+        import android.widget.Button;
+        import android.widget.ProgressBar;
+        import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+        import androidx.appcompat.app.AppCompatActivity;
+        import androidx.recyclerview.widget.DividerItemDecoration;
+        import androidx.recyclerview.widget.LinearLayoutManager;
+        import androidx.recyclerview.widget.RecyclerView;
 
-import com.rscja.deviceapi.RFIDWithUHF;
+        import com.rscja.deviceapi.RFIDWithUHF;
 
-import java.util.HashSet;
-import java.util.Set;
+        import java.util.HashSet;
+        import java.util.Set;
 
-import mx.rfpro.uhfreader.adapter.TagAdpater;
+        import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+        import mx.rfpro.uhfreader.adapter.TagAdpater;
 
 public class ReaderUHFActivity extends AppCompatActivity {
 
@@ -50,9 +51,12 @@ public class ReaderUHFActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                tagSet.clear();
-                tagAdpater.updateList(tagSet);
-                new UpdateTagListTask().execute();
+                if(!loopFlag){
+                    tagSet.clear();
+                    tagAdpater.updateList(tagSet);
+                    new UpdateTagListTask().execute();
+                }
+
             }
         });
         mContext = this;
@@ -65,6 +69,7 @@ public class ReaderUHFActivity extends AppCompatActivity {
 
         tagAdpater = new TagAdpater();
         rv.setAdapter(tagAdpater);
+        rv.setItemAnimator(new SlideInUpAnimator());
 
 
         progressBar = findViewById(R.id.progressBar);

@@ -20,8 +20,8 @@ public class TagAdpater extends RecyclerView.Adapter<TagAdpater.TagViewHolder>{
     List<String> tagList;
 
 
-    public TagAdpater(Set<String> tagSet) {
-        this.tagList = new ArrayList<String>(tagSet);
+    public TagAdpater() {
+        this.tagList = new ArrayList<String>();
     }
 
     public void updateList(Set<String> tagSet) {

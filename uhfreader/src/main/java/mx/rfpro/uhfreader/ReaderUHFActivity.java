@@ -1,27 +1,34 @@
 package mx.rfpro.uhfreader;
 
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.text.TextUtils;
-        import android.util.Log;
-        import android.view.KeyEvent;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.ProgressBar;
-        import android.widget.Toast;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import androidx.appcompat.app.AppCompatActivity;
-        import androidx.recyclerview.widget.DividerItemDecoration;
-        import androidx.recyclerview.widget.LinearLayoutManager;
-        import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-        import com.rscja.deviceapi.RFIDWithUHF;
+import com.rscja.deviceapi.RFIDWithUHF;
 
-        import java.util.HashSet;
-        import java.util.Set;
+import java.util.HashSet;
+import java.util.Set;
 
-        import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
-        import mx.rfpro.uhfreader.adapter.TagAdpater;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+import mx.rfpro.uhfreader.adapter.TagAdpater;
 
 public class ReaderUHFActivity extends AppCompatActivity {
 
@@ -36,6 +43,7 @@ public class ReaderUHFActivity extends AppCompatActivity {
     private boolean loopFlag;
     private ProgressBar progressBar;
     private Button clearButton;
+    private int value;
 
 
 
@@ -43,6 +51,10 @@ public class ReaderUHFActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reader_uhf_main_layout);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         RecyclerView rv = findViewById(R.id.recyclerViewTag);
         rv.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
@@ -122,6 +134,91 @@ public class ReaderUHFActivity extends AppCompatActivity {
             mReader.free();
         }
         super.onDestroy();
+    }
+
+    private void showSettingsDialog(){
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+
+        // set title
+        alertDialogBuilder.setTitle("Settings");
+        final View customLayout = getLayoutInflater().inflate(R.layout.settings_layout, null);
+        alertDialogBuilder.setView(customLayout);
+
+        SeekBar seekBar = customLayout.findViewById(R.id.seekBar);
+        seekBar.setProgress(0);
+        seekBar.setMax(30);
+        final TextView textView = customLayout.findViewById(R.id.textViewCount);
+        Button button = customLayout.findViewById(R.id.setButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mContext.mReader.setPower(value)) {
+
+                    Toast.makeText(mContext,"Success",Toast.LENGTH_LONG).show();
+
+                } else {
+                    Toast.makeText(mContext,"Success",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                textView.setText(String.valueOf(i));
+                value = i;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(true)
+                .setNegativeButton("Close",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            showSettingsDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
